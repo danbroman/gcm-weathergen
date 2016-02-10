@@ -31,6 +31,10 @@ dir_dat = '/Users/danbroman/Documents/Graduate School/Data/HadISD/WMO_600000-699
 header_dat = 'hadisd.1.0.2.2013f.' #based on version of HADISD
 #location of station info file
 isd_info = fread('/Users/danbroman/Documents/Graduate School/Data/HadISD/isd-history.csv')
+#location of output
+dir_output = '/Users/danbroman/Documents/Graduate School/Heat Stress1/'
+#run name - output file tag
+run_name = 'isd_wafr'
 
 ##preprocess
 time_base = as.POSIXct('1973-01-01 00:00:00')
@@ -78,4 +82,9 @@ dat_day_qc = dat_day %>% dplyr::filter(nhour >= nhour_thresh)
 filter_set = dat_day %>% group_by(name, usaf) %>% dplyr::summarise(date_diff = max(date_diff, na.rm = T), nday = max(nday)) %>% dplyr::filter(date_diff <= nmiss_thresh, nday >= nday_thresh)
 dat_day_qc = dat_day_qc %>% ungroup() %>% dplyr::filter(usaf %in% filter_set$usaf)
 
+##save data
+write.csv(isd_set, paste0(dir_output, run_name, '-metadata.csv'))
+saveRDA(isd_set, paste0(dir_output, run_name, '-metadata.rda'))
 
+write.csv(dat_day_qc, paste0(dir_output, run_name, '.csv'))
+saveRDA(dat_day_qc, paste0(dir_output, run_name, '.rda'))
