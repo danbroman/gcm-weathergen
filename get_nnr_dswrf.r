@@ -59,6 +59,7 @@ for(i in 1:nrow(metadata)) {
 	solarrad_dat_sta_temp = solarrad_dat %>% dplyr::filter(lon == lon_temp, lat == lat_temp) %>% dplyr::rename(srad = val) %>% dplyr::select(date, srad) %>% dplyr::mutate(usaf = metadata_temp$usaf, name = metadata_temp$name)
 	solarrad_dat_sta = bind_rows(solarrad_dat_sta, solarrad_dat_sta_temp)
 }
+solarrad_dat_sta = solarrad_dat_sta %>% dplyr::mutate(year = year(date), month = month(date), day = day(date)) %>% dplyr::select(usaf, name, year, month, day, srad)
 saveRDS(solarrad_dat_sta, paste0(dir_dat, run_name, '.rda'))
  
 
