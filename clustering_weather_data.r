@@ -37,3 +37,7 @@ for(j in 1:length(seas_list)){
 clust_dt = data.table(clust_dt)
 write.csv(clust_dt, paste0(dir_dat, 'clust_table.csv'), row.names = F)
 saveRDS(clust_dt, paste0(dir_dat, 'clust_table.rda'))
+
+weather_dat_seas_clust = left_join(weather_dat_seas, clust_dt)
+clust_means = weather_dat_seas_clust %>% group_by(year, seas, variable, clust_kmeans) %>% dplyr::summarise(value = mean(value_fill, na.rm = T))
+saveRDS(clust_means, paste0(dir_dat,'clust_means.rda'))
